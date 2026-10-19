@@ -47,10 +47,14 @@ cmake --build build
 テストセットは 2 種類ある。
 
 - `test/` — repo 同梱のテストセット。pmd は `test/fixtures/` にある (作者の了承済み、入手元は同ディレクトリの README)
+- `test/public/` — ネットで入手できる pmd (48 曲) のテストセット。再配布できないので pmd は含めず、
+  入手元 (`sources.json`) と golden だけを置く。`tools/fetch-public.mjs` で入手元から取得する
 - 手元のコレクション — 再配布できない pmd を含むので、テストセットもファイル名を含めて repo の外に置く
 
 ```sh
-cmake --build build && ctest --test-dir build    # test/ の fixture で照合
+node tools/fetch-public.mjs                      # 公開テストセットの pmd を ../testsets/public-cache に取得 (要 7z)
+cmake -S . -B build && cmake --build build
+ctest --test-dir build                           # test/ と、取得済みなら test/public/ で照合
 ```
 
 手元のテストセットを使う場合:

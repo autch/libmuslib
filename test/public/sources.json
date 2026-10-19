@@ -1,0 +1,386 @@
+{
+ "note": "再配布できないため pmd ファイルそのものは含めない。tools/fetch-public.mjs で入手元から取得する。",
+ "sources": [
+  {
+   "source": "aquaplus",
+   "credit": "P/ECE 公式 フリー音楽素材 (AQUAPLUS)",
+   "page": "https://aquaplus.jp/piece/dl/musdata.html",
+   "url": "https://aquaplus.jp/piece/dl/musdata.exe",
+   "archiveSha256": "05c650505f889be2cfef0f534d2107417e9a6b13f8507779a4653857d919a2cb",
+   "files": [
+    {
+     "path": "data/music/c350.pmd",
+     "sha256": "1e49ef4fb0b082e1c4f3efc8130f64c2e59cf68e2f9213da8060c329c6a01c60"
+    },
+    {
+     "path": "data/music/c379.pmd",
+     "sha256": "93de2ba711734bb76a0321dffe0f3813f1ff8de94402fdffd5cd1f3f08167727"
+    },
+    {
+     "path": "data/music/c482.pmd",
+     "sha256": "cccfb6a38e0b49907a2bbe3ebfc1d7249f4f313a59bb955e4b01c184a1b74f04"
+    },
+    {
+     "path": "data/music/c560.pmd",
+     "sha256": "60451e004b4bac4d43a4405adfe333556776dc85d1edfb678618841e2bb112ba"
+    },
+    {
+     "path": "data/music/c571.pmd",
+     "sha256": "d6cd795541721c14ad395aa8d27a4f962430295f1a925fda7fed17ed20e44f4f"
+    },
+    {
+     "path": "data/music/c578.pmd",
+     "sha256": "5ef23fb0821cdd6da2219fb91773ff0cdff32dc37dc21ccfdf464ff11d0e4960"
+    },
+    {
+     "path": "data/music/free_001.pmd",
+     "sha256": "c8eac4bc661160b9c7d9957a42b3d8cde090c9a9dc28463adeb7e7880aeeb0d5"
+    },
+    {
+     "path": "data/music/free_002.pmd",
+     "sha256": "0dcd67a9a3b38a37c826d5caed0e61fcc9597c8adc2739d47f4a2d0a594c0053"
+    },
+    {
+     "path": "data/music/free_003.pmd",
+     "sha256": "2da14d2aca3cbd60fd993958100a950480dce39746366855bcd9dda0665f4279"
+    }
+   ]
+  },
+  {
+   "source": "chemool",
+   "credit": "Firecracker P/ECE Music Data collection (CHEMOOL)",
+   "page": "https://sound.jp/chemool/piecelib.html",
+   "url": "https://sound.jp/chemool/zip/fcpmdc02.zip",
+   "archiveSha256": "3ec1f98b479a97c681c916144d5620af483d4257aee8ace73ed3d3840882bcd1",
+   "files": [
+    {
+     "path": "data/beast.pmd",
+     "sha256": "e4ff98009d021ae62410842606c3f58fb1badcaaf33469feab65753f4c6943d6"
+    },
+    {
+     "path": "data/bslave.pmd",
+     "sha256": "e21078128a9999d99fff6a79db82fd66f038d132daa93956262c16ce2a9a0ce2"
+    },
+    {
+     "path": "data/callin.pmd",
+     "sha256": "a9001e3e47f224bd017f211e15114053eb21d00ef1a4a007bb503da587ae2326"
+    },
+    {
+     "path": "data/emot.pmd",
+     "sha256": "3c2c9ab96873d86cc3a28cbdd8f94196d70b12151eb6a2af765e8b5e4e00e4c2"
+    },
+    {
+     "path": "data/gym92.pmd",
+     "sha256": "df743c1fc88f77c03b50efb94f6c02df92ff919863a84337743833e6bc8f9ed6"
+    },
+    {
+     "path": "data/kitaru.pmd",
+     "sha256": "36671ef6127b8c0c3b150aa8e80c796dc0e29cbba9b1b9abdce4d21e8fd958fc"
+    },
+    {
+     "path": "data/legwin.pmd",
+     "sha256": "b9d0f4000936c19c11a95dc03430d3a5549a22f08acc846516e95fbd60d776dd"
+    },
+    {
+     "path": "data/tonso.pmd",
+     "sha256": "0b1a4b31540cc8f957a6962a491ed9887516c42ca2f4f51a977092bd69e7dc4c"
+    },
+    {
+     "path": "data/winnie.pmd",
+     "sha256": "8d8d6e13aed745e9f121de3af2f569702d81f578b7001524c3675d4b43d9cc59"
+    }
+   ]
+  },
+  {
+   "source": "chemool",
+   "credit": "Firecracker P/ECE Music Data collection (CHEMOOL)",
+   "page": "https://sound.jp/chemool/piecelib.html",
+   "url": "https://sound.jp/chemool/zip/fcpmdc03.zip",
+   "archiveSha256": "0c4880911ad7fb7133050e67f6c326816ed5102f40318f491dc764bba9a70353",
+   "files": [
+    {
+     "path": "data/medit.pmd",
+     "sha256": "a38f9bca0908d7f75a9f9c34bdc5de4ef7ec8dd7af060e66a98ba37b6c04ea52"
+    },
+    {
+     "path": "data/pluck.pmd",
+     "sha256": "7f5ac0b2461470313f8ac9f3a45a53a6df7854c09bece421cfeb7f5dd7d6d8d0"
+    },
+    {
+     "path": "data/sum99.pmd",
+     "sha256": "7ef8bff04f2dcdda7379f9c5bf30156593243db13504eb69f56fc4acdc7fe62f"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/bd1_002.lzh",
+   "archiveSha256": "32bc619144a7a4b0ff1df4d3d09b4fc25deba97419f1a100754ca3e713a85cb7",
+   "files": [
+    {
+     "path": "bd1_002.pmd",
+     "sha256": "804e4eb801739030f7d8f6c70433723e72bef3ea067ad4549ebd8ee9a1e64eef"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/ds4_a07.lzh",
+   "archiveSha256": "5d56b5cd9db56cfa5a67051a9c7cb1bcb0ff449b10940f935db3fb101b74efc3",
+   "files": [
+    {
+     "path": "ds4_a07.pmd",
+     "sha256": "ac52e34fbe6c2c2bffecc50ace33713a18364bd06c199a1a3468fcdec266dd96"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/ds4_b02.lzh",
+   "archiveSha256": "437d2f30e14199af18be70f9b9aba4fb337760b4ecf5e50d450daf5b89148bb9",
+   "files": [
+    {
+     "path": "ds4_b02.pmd",
+     "sha256": "6bf6eeb4e3910adf8b733dcb1410cc270f56c97f81b711a002285b692e59b29e"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/ds4_b04.lzh",
+   "archiveSha256": "3c713df5a7999a6c616a1c5ea10067e0a89fda9ac574fc8c2a36dda53a8c3fa1",
+   "files": [
+    {
+     "path": "ds4_b04.pmd",
+     "sha256": "aa7af6d99818ea9c0c52aac79cbe932c04d0501bfc5beaa4f2ad341f326ee201"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/org_224.lzh",
+   "archiveSha256": "f40fdef5a5f31685f59292b8d3b6553dddfa142b126eadcde4a3b17fe0e458d8",
+   "files": [
+    {
+     "path": "org_224.pmd",
+     "sha256": "13e8886eeff621acaae246e132632a26e3a99844f7cfda361557f4aa813f2102"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/ormc_122.lzh",
+   "archiveSha256": "fa8ea52e0465809e5fa4a90afc4b3cf2d33f6edac2697faca687b3f449b783a5",
+   "files": [
+    {
+     "path": "ormc_122.pmd",
+     "sha256": "2ad8c66646aef7a64321e5515f74a187fd8f6e5db9c64571b5fe0036a0c5074f"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/rm2air.lzh",
+   "archiveSha256": "d5265c665e157cbcf156f864a1c600159d77882d9c1fba3c3bac8cb21081a94f",
+   "files": [
+    {
+     "path": "rm2air.pmd",
+     "sha256": "b7144dd3abd635acd3676a385b027c3493be59f2201e1fd449e3d3be732062b5"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/rm2flash.lzh",
+   "archiveSha256": "dde6f403c3af0ba02f1fff77a05e3af884207b453d8727e2e778544b8d3e9275",
+   "files": [
+    {
+     "path": "rm2flash.pmd",
+     "sha256": "2acdc0c8fe4c1442956bd583c77043b3839b454989f85a01a1f4375c50b6af3b"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/rm2metal.lzh",
+   "archiveSha256": "355ff85846e5701ba0e416d6bc5effd34dddcc621b8d0a679c675bba0a50e451",
+   "files": [
+    {
+     "path": "rm2metal.pmd",
+     "sha256": "4019c1abc48180e466d35d467b635ad003f4042dce1dc53c9e20e85a86857bc5"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/sample_1.lzh",
+   "archiveSha256": "c0d3b131bfb03415238626caa2250cf23bee4bbaa7581808f652262415a34cca",
+   "files": [
+    {
+     "path": "sample_1.pmd",
+     "sha256": "5208a4e79031c40036f5760b9529c46012fdd9ccf5b56659d29749221b446ace"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/sample_2.lzh",
+   "archiveSha256": "b56cde48e8d6f3a9854f504220c2bed28d16ee53641ac301e2593f1f0809f136",
+   "files": [
+    {
+     "path": "sample_2.pmd",
+     "sha256": "99a1dd0adf36041f9bb25537b13fcf139632194078c798548027f1fdd9361582"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/sample_3.lzh",
+   "archiveSha256": "239e88533f3c7ea036bf0871f4d5eb52162e3acb5deaeec6b91c76109b6013ae",
+   "files": [
+    {
+     "path": "sample_3.pmd",
+     "sha256": "f01f69b3781e72af9e54271c0e4d232d0c0f929b3bd94090986699644273c63d"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/th_02.lzh",
+   "archiveSha256": "93e91e6d12de35d9d66c9dc6836492d3a1e27654dffb34654a49173a77560218",
+   "files": [
+    {
+     "path": "th_02.pmd",
+     "sha256": "362ef3066020d4efbb86102af936cec0fdec104134d7ce54460e419b57171ae9"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/th_13.lzh",
+   "archiveSha256": "58126b07f15c51a546bad10a149bcf27e604f161565fbea0515448d1e065c54b",
+   "files": [
+    {
+     "path": "th_13.pmd",
+     "sha256": "7894217205ff42df63a6d55b67d58be49abda0ba6aee406ed9821f12521bce37"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/yakyu_1.lzh",
+   "archiveSha256": "1bdac7a9fa85f9e24fac824bd846072cde9425f877a1dcc654f83f930cfaf953",
+   "files": [
+    {
+     "path": "yakyu_1.pmd",
+     "sha256": "24373b3e221ec608403555cbbf648a7891e34f528a0febb533d5db59d42b0018"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/yakyu_2.lzh",
+   "archiveSha256": "2fbf1340cb8e463c7c5cd00fecedda840770cac636f28d0f056a873c57dfa764",
+   "files": [
+    {
+     "path": "yakyu_2.pmd",
+     "sha256": "707dd4c89f60930dfacb2048e10aa4412d00826435401ecdb58766df0b86378e"
+    }
+   ]
+  },
+  {
+   "source": "orphe",
+   "credit": "ORPHE",
+   "page": "http://www.orphe.net/piece.html",
+   "url": "http://www.orphe.net/data/piece/yakyu_3.lzh",
+   "archiveSha256": "1e5737f3f2efbf26a3e6ab39294ec3487679d231a762586159da03c36d783c0d",
+   "files": [
+    {
+     "path": "yakyu_3.pmd",
+     "sha256": "887de79828377d0713f96a51ab91208fe9ecda9b8485bf6faab603c2e004ae93"
+    }
+   ]
+  },
+  {
+   "source": "pko",
+   "credit": "P.K.O. (zurachu)",
+   "page": "https://github.com/zurachu/pko",
+   "url": "https://codeload.github.com/zurachu/pko/zip/7b20328a8c9b243408f7ccbba5ed7b29b9602deb",
+   "archiveSha256": "ba3558075f8dcbef450d5fede1f076c9ceb6c1f5d0ae8daafc46d8b702471a38",
+   "files": [
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/01.pmd",
+     "sha256": "465df8d05cdbcde7e50ab7ce3b669c7c4d59362803f78fb6d7fd284ab6ccb742"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/02.pmd",
+     "sha256": "b4f6c91a4af4debf19f6f8b12550b2700966d88d625361aa3b36e4a894d78e4b"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/10.pmd",
+     "sha256": "16f38407690f5401c17fd8cc7cf6961b4b6622ce4f8e50bd01484d38d0065fac"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/11.pmd",
+     "sha256": "f68824bd46651ed37d717edae16fe648348ac39ce891e3a646eb0b61d832a780"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/15.pmd",
+     "sha256": "fed65599f5baa9b715a43f604045fd0c2801ee946a1ca92475e251e293424f93"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/17.pmd",
+     "sha256": "65c2b34db31e1057dc365a2f923e56ae5a188ce96d0c0e685b91149460435aa1"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/19.pmd",
+     "sha256": "f48dfe509b21f008c931d9d9e393916ed43a31043dc0b39000dea4951240eaa1"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/22.pmd",
+     "sha256": "df544dad52f4ac7d1b1f1d7096bb28ac66a66406219b724be1c757e8b4fec973"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/ending.pmd",
+     "sha256": "feae04990bc9fc4c965c5878ffb268427eacc8ae0ad32ecc957fea4650e67350"
+    },
+    {
+     "path": "pko-7b20328a8c9b243408f7ccbba5ed7b29b9602deb/lastboss.pmd",
+     "sha256": "80d192f5be8dbb89b19f77195597819fffb2a54ec1d2cc15c6967312327db9ce"
+    }
+   ]
+  }
+ ]
+}

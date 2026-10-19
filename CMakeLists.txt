@@ -38,6 +38,15 @@ if(NOT EMSCRIPTEN)
       COMMAND ${NODE_EXECUTABLE} tools/golden.mjs check
         --set test --pmd-dir test/fixtures --cli $<TARGET_FILE:muslib-render>
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    # 公開テストセット。pmd は tools/fetch-public.mjs で取得しておく
+    set(MUSLIB_PUBLIC_PMD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../testsets/public-cache/pmd"
+      CACHE PATH "tools/fetch-public.mjs で取得した公開テストセットの pmd")
+    if(EXISTS ${MUSLIB_PUBLIC_PMD_DIR})
+      add_test(NAME golden-public
+        COMMAND ${NODE_EXECUTABLE} tools/golden.mjs check
+          --set test/public --pmd-dir ${MUSLIB_PUBLIC_PMD_DIR} --cli $<TARGET_FILE:muslib-render>
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    endif()
     if(DEFINED ENV{MUSLIB_TESTSET} AND DEFINED ENV{PMD_DIR})
       add_test(NAME golden-private
         COMMAND ${NODE_EXECUTABLE} tools/golden.mjs check
