@@ -3,20 +3,26 @@
 //
 // golden PCM の生成と照合。
 //
-//   node tools/golden.mjs make  --cli <renderer> --pmd-dir <dir> [--out test/golden.json] [--exclude test/excluded.json]
-//   node tools/golden.mjs check --cli <renderer> --pmd-dir <dir> [--golden test/golden.json] [--ref <renderer>]
+//   node tools/golden.mjs make  --set <dir> --cli <renderer> --pmd-dir <dir>
+//   node tools/golden.mjs check --set <dir> --cli <renderer> --pmd-dir <dir> [--ref <renderer>]
+//
+// --set はテストセットのディレクトリで、golden.json と excluded.json (任意) を置く。
+// 環境変数 MUSLIB_TESTSET / PMD_DIR でも指定できる。
+// 再配布できない pmd のテストセットは、ファイル名も含めて repo の外に置くこと。
 //
 // <renderer> は `<renderer> -r RATE -n MAXBLOCKS file.pmd` で int16le raw を stdout に、
 // "blocks=N finished=0|1" を stderr に出すコマンド。
 // pmd ファイルは再配布できないものを含むので repo には置かず、ハッシュだけを記録する。
-// 壊れていて実機でも正常に鳴らない pmd は excluded.json に { "ファイル名": "理由" } で
-// 列挙して golden から外す (C 版の出力が未定義動作に依存するため基準にできない)。
+// 壊れていて実機でも正常に鳴らない pmd は excluded.json に列挙して golden から外す
+// (C 版の出力が未定義動作に依存するため基準にできない)。
+//   "ファイル名": "理由"                          ファイルごと除外
+//   "ファイル名": { "reason": "...", "seconds": n }   n 秒 (未定義動作の手前) までで打ち切る
 // check で --ref (通常は muslib-legacy-render) を渡すと、不一致のときに最初にずれた
 // ブロック番号とサンプル位置まで絞り込む。
 
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { availableParallelism } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -85,15 +91,30 @@ async function pool(items, fn) {
     return results;
 }
 
-async function make({ cli, pmdDir, out, exclude }) {
-    const excluded = JSON.parse(await readFile(exclude, 'utf8'));
-    const pmds = (await listPmd(pmdDir)).filter((p) => !(p.name in excluded));
-    const jobs = pmds.flatMap((p) => RATES.map((rate) => ({ ...p, rate })));
+async function readExcluded(file) {
+    try {
+        await access(file);
+    } catch {
+        return {};
+    }
+    return JSON.parse(await readFile(file, 'utf8'));
+}
+
+async function make({ cli, pmdDir, set }) {
+    const out = path.join(set, 'golden.json');
+    const excluded = await readExcluded(path.join(set, 'excluded.json'));
+    const pmds = (await listPmd(pmdDir)).filter((p) => typeof excluded[p.name] !== 'string');
+    const jobs = pmds.flatMap((p) => RATES.map((rate) => {
+        const sec = excluded[p.name]?.seconds;
+        const maxBlocks = sec === undefined ? MAX_BLOCKS : Math.min(MAX_BLOCKS, Math.floor(sec * rate / BLOCK_SAMPLES));
+        return { ...p, rate, maxBlocks };
+    }));
     const entries = await pool(jobs, async (j) => ({
         file: j.name,
         pmdSha256: j.pmdSha256,
         rate: j.rate,
-        ...digest(await render(cli, j.file, j.rate)),
+        ...(j.maxBlocks < MAX_BLOCKS ? { maxBlocks: j.maxBlocks } : {}),
+        ...digest(await render(cli, j.file, j.rate, j.maxBlocks)),
     }));
     const golden = {
         generator: path.basename(cli),
@@ -106,7 +127,7 @@ async function make({ cli, pmdDir, out, exclude }) {
     await writeFile(out, JSON.stringify(golden, null, 1) + '\n');
     const finished = entries.filter((e) => e.finished).length;
     console.log(`${entries.length} entries (${pmds.length} files x ${RATES.length} rates, ${finished} finished) -> ${out}`);
-    console.log(`excluded: ${Object.keys(excluded).join(', ') || '(none)'}`);
+    console.log(`excluded: ${Object.entries(excluded).map(([k, v]) => typeof v === 'string' ? k : `${k} (${v.seconds}s)`).join(', ') || '(none)'}`);
 }
 
 function firstDiff(a, b) {
@@ -117,8 +138,8 @@ function firstDiff(a, b) {
     return a.length === b.length ? -1 : n;
 }
 
-async function check({ cli, pmdDir, golden: goldenPath, ref }) {
-    const golden = JSON.parse(await readFile(goldenPath, 'utf8'));
+async function check({ cli, pmdDir, set, ref }) {
+    const golden = JSON.parse(await readFile(path.join(set, 'golden.json'), 'utf8'));
     const pmds = new Map((await listPmd(pmdDir)).map((p) => [p.name, p]));
     let pass = 0, fail = 0, skip = 0;
 
@@ -128,7 +149,8 @@ async function check({ cli, pmdDir, golden: goldenPath, ref }) {
             skip++;
             return;
         }
-        const r = await render(cli, p.file, e.rate, golden.maxBlocks);
+        const maxBlocks = e.maxBlocks ?? golden.maxBlocks;
+        const r = await render(cli, p.file, e.rate, maxBlocks);
         const d = digest(r);
         if (d.sha256 === e.sha256 && d.blocks === e.blocks && d.finished === e.finished) {
             pass++;
@@ -139,7 +161,7 @@ async function check({ cli, pmdDir, golden: goldenPath, ref }) {
         const seg = e.segments.findIndex((h, i) => d.segments[i] !== h);
         if (seg >= 0) msg += `, first bad segment ${seg} (blocks ${seg * golden.segmentBlocks}-)`;
         if (ref) {
-            const rr = await render(ref, p.file, e.rate, golden.maxBlocks);
+            const rr = await render(ref, p.file, e.rate, maxBlocks);
             const s = firstDiff(r.pcm, rr.pcm);
             if (s >= 0) msg += `, first diff at block ${Math.floor(s / BLOCK_SAMPLES)} sample ${s % BLOCK_SAMPLES}`;
         }
@@ -156,16 +178,14 @@ async function main() {
         options: {
             cli: { type: 'string' },
             'pmd-dir': { type: 'string', default: process.env.PMD_DIR },
-            out: { type: 'string', default: 'test/golden.json' },
-            golden: { type: 'string', default: 'test/golden.json' },
-            exclude: { type: 'string', default: 'test/excluded.json' },
+            set: { type: 'string', default: process.env.MUSLIB_TESTSET },
             ref: { type: 'string' },
         },
     });
     const opts = { ...values, pmdDir: values['pmd-dir'] };
 
-    if (!opts.cli || !opts.pmdDir || !['make', 'check'].includes(positionals[0])) {
-        console.error('usage: golden.mjs make|check --cli <renderer> --pmd-dir <dir> (or PMD_DIR)');
+    if (!opts.cli || !opts.pmdDir || !opts.set || !['make', 'check'].includes(positionals[0])) {
+        console.error('usage: golden.mjs make|check --set <dir> (or MUSLIB_TESTSET) --cli <renderer> --pmd-dir <dir> (or PMD_DIR) [--ref <renderer>]');
         process.exit(2);
     }
     await (positionals[0] === 'make' ? make(opts) : check(opts));

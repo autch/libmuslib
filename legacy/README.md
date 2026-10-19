@@ -5,7 +5,7 @@
 `shim.h` / `render.c` は Windows / KbMedia Player 依存部分 (`windows.h`、`MulDiv`、
 `pceWaveDataOut`、`winlayer.cpp` のレート設定と `Render()`) を Linux 上で再現するためのもの。
 
-このディレクトリは `test/golden.json` を作るためだけにあり、今後は変更しない。
+このディレクトリは golden (`tools/golden.mjs` 参照) を作るためだけにあり、今後は変更しない。
 変更すると golden の意味が変わるので、変える場合は golden を作り直して理由を記録すること。
 
 ## 元コードからの改変

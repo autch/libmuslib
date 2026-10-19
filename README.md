@@ -4,10 +4,27 @@ P/ECE 標準音楽ドライバ muslib を、ネイティブと WebAssembly の�
 
 ## 状態
 
-1. [x] 旧 C 版 (auPiECE.kpi) を Linux で動かし、golden PCM を生成する — `legacy/`, `test/golden.json`
-2. [ ] グローバル変数を構造体にまとめ、`muldiv` を導入する。ネイティブ版で golden と一致させる
+1. [x] 旧 C 版 (auPiECE.kpi) を Linux で動かし、golden PCM を生成する — `legacy/`, `tools/golden.mjs`
+2. [x] グローバル変数を構造体にまとめ、`muldiv` を導入する。ネイティブ版で golden と一致させる — `include/`, `src/`, `cli/`
 3. [ ] wasm ビルド
 4. [ ] (別途) auPiECE.kpi をこのライブラリに移行する
+
+## 構成
+
+- `include/muslib.h` — 公開 API (`muslib_init` / `muslib_play` / `muslib_render` …)。1 インスタンスが 1 曲分の状態を持ち、グローバル変数は使わない
+- `src/` — エンジン本体 (muslib 由来)
+- `cli/muslib-render.c` — pmd を raw PCM に書き出すツール。golden の照合にも使う
+- `legacy/` — golden 生成専用の凍結版
+- `tools/golden.mjs` — golden の生成と照合
+
+### 旧 C 版からの挙動の変更 (正しいデータでは出力は変わらない)
+
+- 存在しない音色番号は無視し、直前の音色のまま演奏を続ける (旧版はクラッシュ)
+- リピートのスタックが空のときの `SeqBreak` / `SeqNext` は何もしない (旧版は直前の構造体メンバを読み書きしていた)。
+  スタックがあふれる場合はそれ以上積まない
+- シーケンスデータはオフセットで扱い、16bit で折り返すので 64KB のバッファの外を読まない
+- ドラム波形の末尾に番兵の 0 を置く (`legacy/README.md` 参照)
+- 最大パート数を 26 から 32 にした (mucc-next の上限)
 
 ## ビルド
 
@@ -20,41 +37,36 @@ cmake --build build
 
 条件: 16000 / 44100 / 48000 Hz、最大 10000 ブロック (1 ブロック = 128 サンプル)。
 比較対象は int16le モノラルのストリーム。
-`test/golden.json` には pmd ファイルそのものは入れず、各 pmd の SHA-256、出力全体の SHA-256、
-500 ブロックごとのハッシュ、ブロック数、演奏が終了したかどうかを記録している。
-pmd は再配布できないものを含むので repo には置かず、ディレクトリを指定して使う。
+
+「テストセット」は 1 つのディレクトリで、次の 2 つのファイルを置く。
+
+- `golden.json` — 各 pmd の SHA-256、出力全体の SHA-256、500 ブロックごとのハッシュ、ブロック数、演奏が終了したかどうか
+- `excluded.json` (任意) — 壊れていて基準にできない pmd と、その理由。
+  未定義動作が途中から始まるだけなら、その手前の秒数で打ち切ることもできる
+
+テストセットは 2 種類ある。
+
+- `test/` — repo 同梱のテストセット。pmd は `test/fixtures/` にある (作者の了承済み、入手元は同ディレクトリの README)
+- 手元のコレクション — 再配布できない pmd を含むので、テストセットもファイル名を含めて repo の外に置く
 
 ```sh
-# 生成 (通常は不要。legacy/ を変えたときだけ)
-node tools/golden.mjs make  --cli build/legacy/muslib-legacy-render --pmd-dir $PMD_DIR
-# 照合。--ref を付けると、ずれ始めたブロックとサンプルの位置まで表示する
-node tools/golden.mjs check --cli <renderer> --pmd-dir $PMD_DIR --ref build/legacy/muslib-legacy-render
+cmake --build build && ctest --test-dir build    # test/ の fixture で照合
 ```
 
-壊れていて基準にできない pmd は `test/excluded.json` に理由を添えて列挙する。
+手元のテストセットを使う場合:
+
+```sh
+export MUSLIB_TESTSET=../testsets/private PMD_DIR=/path/to/pmd   # cmake の configure 前に設定すると ctest にも入る
+# 生成 (通常は不要。legacy/ を変えたときだけ)
+node tools/golden.mjs make  --cli build/legacy/muslib-legacy-render
+# 照合。--ref を付けると、ずれ始めたブロックとサンプルの位置まで表示する
+node tools/golden.mjs check --cli build/muslib-render --ref build/legacy/muslib-legacy-render
+```
 
 ## ライセンス
 
 この repo には、ライセンスが異なる 2 種類のファイルがある。
 
 - **このプロジェクトで書いたファイル** (`SPDX-License-Identifier: MIT` と書いてあるもの): MIT License (`LICENSE`)
-- **P/ECE muslib に由来するファイル** (`legacy/muslib/` 以下と、今後それを元に作るエンジン本体):
-  auPiECE.kpi と同じ扱いとする。
-
-> このプログラムは，P/ECE 標準音楽ライブラリ muslib のソースにパッチを当てたものが使用されています。
-> オリジナルの muslib ライブラリの著作権表示は以下のとおりです。
->
->     Copyright (C)2001 AQUAPLUS Co., Ltd. / OeRSTED, Inc.
->     all rights reserved.
->     Coded by MIO.H (OeRSTED)
->
-> これらの改変についてアクアプラスはなんら関係なく，プログラムの内容およびそれの実行結果について，
-> アクアプラスは一切の責任を負いません。このプログラムに関する一切の事柄についてアクアプラスに
-> サポートを求めてはいけません。
->
-> 私およびアクアプラスは，このプログラムを使用したこと，または使用しなかった，使用できなかった事に
-> よって発生する，または発生する恐れのある一切の損害について，それらが発生することをあらかじめ
-> 知っていたか，あるいは知ることができたとしても，私およびアクアプラスは何らの法的および道義的
-> 責任を負いません。
->
-> これら以外については，P/ECE デフォルトのフリーソフトの扱いに準じます。
+- **P/ECE muslib に由来するファイル** (`src/` と `legacy/muslib/` 以下): アクアプラスの再配布条件に従う。
+  元にしたソースファイル名、再配布条件の原文、免責事項は `LICENSE-PIECE.md` を参照
