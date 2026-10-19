@@ -29,11 +29,15 @@ extern "C" {
 
 typedef struct muslib muslib_t;
 
+/* MUSLIB_BLOCK_SAMPLES と同じ値 (wasm から定数を引くため) */
+int muslib_block_samples(void);
+
 /* muslib_t に必要なバイト数 (pmd の 64KB バッファを含む) */
 size_t muslib_size(void);
 
-/* 出力サンプリング周波数を設定して初期化する。MUSLIB_MAX_RATE を超える値は
-   MUSLIB_MAX_RATE に丸める。実際に使うレートを返す。rate <= 0 のときは 0 を返す。 */
+/* 出力サンプリング周波数を設定して初期化する。確保した muslib_t は最初にこれを呼ぶこと。
+   MUSLIB_MAX_RATE を超える値は MUSLIB_MAX_RATE に丸める。実際に使うレートを返す。
+   rate <= 0 のときは 0 を返し、次に正しいレートで呼ぶまで muslib_play() は失敗する。 */
 int32_t muslib_init(muslib_t *m, int32_t rate);
 
 /* pmd データを内部バッファにコピーして演奏を始める。

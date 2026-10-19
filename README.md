@@ -6,7 +6,7 @@ P/ECE 標準音楽ドライバ muslib を、ネイティブと WebAssembly の�
 
 1. [x] 旧 C 版 (auPiECE.kpi) を Linux で動かし、golden PCM を生成する — `legacy/`, `tools/golden.mjs`
 2. [x] グローバル変数を構造体にまとめ、`muldiv` を導入する。ネイティブ版で golden と一致させる — `include/`, `src/`, `cli/`
-3. [ ] wasm ビルド
+3. [x] wasm ビルド — `wasm/`
 4. [ ] (別途) auPiECE.kpi をこのライブラリに移行する
 
 ## 構成
@@ -14,6 +14,7 @@ P/ECE 標準音楽ドライバ muslib を、ネイティブと WebAssembly の�
 - `include/muslib.h` — 公開 API (`muslib_init` / `muslib_play` / `muslib_render` …)。1 インスタンスが 1 曲分の状態を持ち、グローバル変数は使わない
 - `src/` — エンジン本体 (muslib 由来)
 - `cli/muslib-render.c` — pmd を raw PCM に書き出すツール。golden の照合にも使う
+- `wasm/muslib.mjs` (+ `muslib.d.mts`) — `muslib.wasm` の薄いラッパ。Node / ブラウザ / AudioWorklet で動く
 - `legacy/` — golden 生成専用の凍結版
 - `tools/golden.mjs` — golden の生成と照合
 
@@ -25,6 +26,8 @@ P/ECE 標準音楽ドライバ muslib を、ネイティブと WebAssembly の�
 - シーケンスデータはオフセットで扱い、16bit で折り返すので 64KB のバッファの外を読まない
 - ドラム波形の末尾に番兵の 0 を置く (`legacy/README.md` 参照)
 - 最大パート数を 26 から 32 にした (mucc-next の上限)
+- ループ波形で 1 サンプルにループ 1 周以上進むときも表の外を読まないようにした
+  (出力レートに対して音程が極端に高いときだけ起きる。4kHz 以上では手元の全曲で起きない)
 
 ## ビルド
 
@@ -32,6 +35,31 @@ P/ECE 標準音楽ドライバ muslib を、ネイティブと WebAssembly の�
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
+
+### wasm
+
+Emscripten で、JS グルーなしの `muslib.wasm` (約 48KB) を作る。
+import は `env.emscripten_notify_memory_growth` だけで、export は公開 API と `malloc` / `free`。
+
+```sh
+emcmake cmake -S . -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build-wasm        # build-wasm/muslib.wasm
+```
+
+JS からは `wasm/muslib.mjs` を使う。AudioWorklet では、メインスレッドで
+`WebAssembly.compile()` した Module を渡し、`Muslib.fromModule()` で同期的に作る。
+
+```js
+import { Muslib } from './wasm/muslib.mjs';
+const m = await Muslib.load(wasmBytes);
+m.init(48000);
+m.play(pmdBytes);
+const buf = new Int16Array(Muslib.BLOCK_SAMPLES);
+while (m.render(buf)) { /* ... */ }
+```
+
+`build-wasm/muslib.wasm` があれば、ctest は golden をネイティブ版と wasm 版の両方で照合し、
+JS ラッパーのテスト (`test/wasm.test.mjs`) も実行する。
 
 ## golden
 

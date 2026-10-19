@@ -49,7 +49,16 @@ void MakeWaveLP( MDEVICE *mp, int16_t *p, int32_t vv, int cnt )
 		uint32_t x = ( cc & 0x3fff );
 		int32_t d1 = tbl[o];
 		int32_t d2 = tbl[o+1];
-		if ( (cc += mp->freq) >= mp->loop_end ) cc -= mp->loop_w;
+		if ( (cc += mp->freq) >= mp->loop_end ) {
+			cc -= mp->loop_w;
+			// 1 サンプルでループ 1 周以上進む (出力レートに対して音程が高すぎる) と
+			// 1 回の減算ではループ内に戻らず、次で表の外を読む。元コードにはない対策で、
+			// 通常の音域では起きないので出力は変わらない。
+			if ( cc >= mp->loop_end ) {
+				uint32_t top = mp->loop_end - mp->loop_w;
+				cc = top + ( cc - top ) % mp->loop_w;
+			}
+		}
 		d2 -= d1;
 		d2 *= x;
 		d2 >>= 14;
@@ -360,6 +369,11 @@ static void Synth( struct muslib *m, int16_t *p0 )
 
 // --------------------------------
 // 公開 API
+
+int muslib_block_samples( void )
+{
+	return MUSLIB_BLOCK_SAMPLES;
+}
 
 size_t muslib_size( void )
 {
