@@ -20,11 +20,12 @@ add_library(muslib STATIC
 )
 target_include_directories(muslib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # 符号付き整数のあふれはラップアラウンドとして扱う (元コードの前提)。
-# MSVC (cl) には -fwrapv に当たるオプションがないので、clang-cl か MinGW を推奨する。
+# MSVC (cl) には -fwrapv に当たるオプションがないので、cl でビルドしたときは
+# muslib-render と golden テスト (ctest) で出力が一致することを確かめること。
 if(MSVC AND CMAKE_C_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(muslib PRIVATE /clang:-fwrapv /W3)
+  target_compile_options(muslib PRIVATE /utf-8 /clang:-fwrapv /W3)
 elseif(MSVC)
-  target_compile_options(muslib PRIVATE /W3)
+  target_compile_options(muslib PRIVATE /utf-8 /W3)
 else()
   target_compile_options(muslib PRIVATE -fwrapv -Wall -Wextra)
 endif()

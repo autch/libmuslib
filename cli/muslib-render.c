@@ -11,6 +11,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#endif
+
 #include "muslib.h"
 
 static void usage( void )
@@ -48,6 +53,9 @@ int main( int argc, char **argv )
 		else usage();
 	}
 	if ( !path || rate <= 0 || maxblocks < 0 ) usage();
+#ifdef _WIN32
+	_setmode(_fileno(stdout), _O_BINARY);	/* 改行の変換で PCM が壊れないように */
+#endif
 
 	if ( !(fp = fopen(path, "rb")) ) { perror(path); return 1; }
 	len = fread(pmd, 1, sizeof(pmd), fp);
