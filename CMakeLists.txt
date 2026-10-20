@@ -37,7 +37,7 @@ if(EMSCRIPTEN)
   # JS グルーなしの単体 wasm (muslib.wasm) を作る
   set(MUSLIB_WASM_EXPORTS
     _muslib_block_samples _muslib_size _muslib_init _muslib_play _muslib_stop
-    _muslib_render _muslib_finished _muslib_title _muslib_title2 _malloc _free)
+    _muslib_render _muslib_finished _muslib_title _muslib_title2 _muslib_num_parts _malloc _free)
   list(JOIN MUSLIB_WASM_EXPORTS "," MUSLIB_WASM_EXPORTS)
   add_executable(muslib-wasm wasm/muslib-wasm.c)
   target_link_libraries(muslib-wasm PRIVATE muslib)

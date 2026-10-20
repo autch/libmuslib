@@ -31,6 +31,7 @@ test('タイトルを生バイト列で返す', () => {
     assert.ok(m.play(fixture('ys2_item')));
     assert.equal(sjis.decode(m.title), '[Ys II] 宝箱');
     assert.equal(sjis.decode(m.title2), '(c) Falcom, arr: Autch');
+    assert.equal(m.numParts, 6);
     m.dispose();
 });
 

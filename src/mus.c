@@ -467,3 +467,8 @@ const char *muslib_title2( const muslib_t *m )
 {
 	return m->title2 ? (const char *)m->data + m->title2 : "";
 }
+
+int muslib_num_parts( const muslib_t *m )
+{
+	return m->parts;
+}

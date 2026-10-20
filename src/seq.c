@@ -80,6 +80,7 @@ void StartSeq( struct muslib *m )
 
 	n = rd(m, seqptr);
 	if ( !n ) n = rd(m, ++seqptr);
+	m->parts = (uint8_t)n;
 	if ( n > MAXSEQ ) n = MAXSEQ;
 
 	s = 1;

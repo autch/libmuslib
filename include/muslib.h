@@ -60,6 +60,10 @@ int muslib_finished(const muslib_t *m);
 const char *muslib_title(const muslib_t *m);
 const char *muslib_title2(const muslib_t *m);
 
+/* pmd のヘッダに書かれたパート数。muslib_play() の後で有効。
+   MUSLIB_MAX_PARTS を超えていてもそのまま返す (演奏するのは MUSLIB_MAX_PARTS パートまで)。 */
+int muslib_num_parts(const muslib_t *m);
+
 #ifdef __cplusplus
 }
 #endif

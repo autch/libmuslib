@@ -132,6 +132,7 @@ struct muslib {
 	uint16_t drumsbase;
 	uint16_t title;
 	uint16_t title2;
+	uint8_t parts;		// ヘッダに書かれたパート数 (MAXSEQ で丸める前)
 	int16_t tempo;
 	int16_t tempowk;
 	char runf;
