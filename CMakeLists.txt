@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
 project(libmuslib LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-option(MUSLIB_BUILD_LEGACY "Build the frozen auPiECE.kpi muslib for golden generation" ON)
+# 他のプロジェクトから add_subdirectory したときは、ライブラリ本体だけをビルドする
+option(MUSLIB_BUILD_TOOLS "Build muslib-render and the golden tests" ${PROJECT_IS_TOP_LEVEL})
+option(MUSLIB_BUILD_LEGACY "Build the frozen auPiECE.kpi muslib for golden generation" ${PROJECT_IS_TOP_LEVEL})
 
 file(GLOB MUSLIB_WAVE_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/wave/*.c)
 
@@ -17,9 +19,18 @@ add_library(muslib STATIC
   ${MUSLIB_WAVE_SOURCES}
 )
 target_include_directories(muslib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-# 符号付き整数のあふれはラップアラウンドとして扱う (元コードの前提)
-target_compile_options(muslib PRIVATE -fwrapv -Wall -Wextra)
-target_link_libraries(muslib PRIVATE m)
+# 符号付き整数のあふれはラップアラウンドとして扱う (元コードの前提)。
+# MSVC (cl) には -fwrapv に当たるオプションがないので、clang-cl か MinGW を推奨する。
+if(MSVC AND CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  target_compile_options(muslib PRIVATE /clang:-fwrapv /W3)
+elseif(MSVC)
+  target_compile_options(muslib PRIVATE /W3)
+else()
+  target_compile_options(muslib PRIVATE -fwrapv -Wall -Wextra)
+endif()
+if(NOT WIN32)
+  target_link_libraries(muslib PRIVATE m)
+endif()
 
 if(EMSCRIPTEN)
   # JS グルーなしの単体 wasm (muslib.wasm) を作る
@@ -41,7 +52,7 @@ if(EMSCRIPTEN)
     -sFILESYSTEM=0
     -Oz)
   target_compile_options(muslib-wasm PRIVATE -Oz)
-else()
+elseif(MUSLIB_BUILD_TOOLS)
   add_executable(muslib-render cli/muslib-render.c)
   target_link_libraries(muslib-render PRIVATE muslib)
 

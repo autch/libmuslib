@@ -39,7 +39,7 @@
 //   short          -> int16_t
 
 #define MAXNESTD 24
-#define MAXCH 32				// auPiECE.kpi は 26。mucc-next は 32 パートまで出力する
+#define MAXCH MUSLIB_MAX_PARTS	// auPiECE.kpi 1.x は 26。mucc-next は 32 パートまで出力する
 
 #define BLKS MUSLIB_BLOCK_SAMPLES
 

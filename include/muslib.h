@@ -26,6 +26,7 @@ extern "C" {
 #define MUSLIB_BLOCK_SAMPLES 128
 #define MUSLIB_MAX_RATE 96000		/* シーケンサのテンポカウンタが 16bit のための上限 */
 #define MUSLIB_MAX_PMD_SIZE 0x10000
+#define MUSLIB_MAX_PARTS 32		/* 演奏するパート数の上限。これより後ろのパートは鳴らさない */
 
 typedef struct muslib muslib_t;
 
