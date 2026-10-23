@@ -101,4 +101,4 @@ node tools/golden.mjs check --cli build/muslib-render --ref build/legacy/muslib-
 
 - **このプロジェクトで書いたファイル** (`SPDX-License-Identifier: MIT` と書いてあるもの): MIT License (`LICENSE`)
 - **P/ECE muslib に由来するファイル** (`src/` と `legacy/muslib/` 以下): アクアプラスの再配布条件に従う。
-  元にしたソースファイル名、再配布条件の原文、免責事項は `LICENSE-PIECE.md` を参照
+  元にしたソースファイル名と再配布条件の原文は `LICENSE-PIECE.md` を参照
